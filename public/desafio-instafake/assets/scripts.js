@@ -1,3 +1,15 @@
+const getPhotos = async (tk) => {
+    const dataphot = await fetch('/api/photos', {
+        headers: {
+            Authorization: `Bearer ${tk}`
+        }
+    })
+    const resp = await dataphot.json();
+    const photos = resp.data;
+    console.log(photos);
+    fotear(photos)
+}
+
 //Chequear si existe token
 const init = () => {
     const token = localStorage.getItem('token');
@@ -27,38 +39,35 @@ $('form').on('submit', async function (ev) {
     getPhotos(token)
 })
 
-
-const getPhotos = async (tk) => {
-    const dataphot = await fetch('/api/photos', {
-        headers: {
-            Authorization: `Bearer ${tk}`
-        }
-    })
-    const resp = await dataphot.json();
-    const photos = resp.data;
-    console.log(photos);
-    fotear(photos)
-}
-
 //Mostrar fotos
 const fotear = (photos) => {
+    const fotocard = $('#fotos');
     // llenar y agregar cards
-    for (photo of photos) {
-        const cards = `
+    let cards = ""
+    for (let photo of photos) {
+        const card = `
             <div class="card">
                 <img src="${photo.download_url}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">Autor: ${photo.author}</h5>
                 </div>
             </div>`;
+        cards+= card
     }
-    
-    console.log(cards);
-    const fotocard = $('#fotos');
     fotocard.html(cards);
-    console.log(fotocard);
+    $('#btnSalir').removeClass('d-none').addClass('d-block');
     $('#logeo').removeClass('d-block').addClass('d-none');
     $('#fotos').removeClass('d-none').addClass('d-block');
 }
 
-//Salir
+//Salir (borrar token e invertir display de ingreso)
+const salir = () => {
+    localStorage.removeItem('token');
+    $('#btnSalir').removeClass('d-block').addClass('d-none');
+    $('#fotos').removeClass('d-block').addClass('d-none');
+    $('#logeo').removeClass('d-none').addClass('d-block');
+}
+
+$('#btnSalir').on('click', function () {
+    salir();
+})

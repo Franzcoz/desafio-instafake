@@ -1,5 +1,7 @@
+let page = 1;
+
 const getPhotos = async (tk) => {
-    const dataphot = await fetch('/api/photos', {
+    const dataphot = await fetch(`/api/photos?page=${page}`, {
         headers: {
             Authorization: `Bearer ${tk}`
         }
@@ -54,7 +56,7 @@ const fotear = (photos) => {
             </div>`;
         cards+= card
     }
-    fotocard.html(cards);
+    fotocard.append(cards);
     $('#btnSalir').removeClass('d-none').addClass('d-block');
     $('#logeo').removeClass('d-block').addClass('d-none');
     $('#fotos').removeClass('d-none').addClass('d-block');
@@ -66,8 +68,16 @@ const salir = () => {
     $('#btnSalir').removeClass('d-block').addClass('d-none');
     $('#fotos').removeClass('d-block').addClass('d-none');
     $('#logeo').removeClass('d-none').addClass('d-block');
+    page = 1
+    $('#fotos').empty();
 }
 
 $('#btnSalir').on('click', function () {
     salir();
+})
+
+$('#btnCargar').on('click', function () {
+    page++;
+    const token = localStorage.getItem('token');
+    getPhotos(token);
 })

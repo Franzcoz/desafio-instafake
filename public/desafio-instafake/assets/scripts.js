@@ -79,5 +79,15 @@ $('#btnSalir').on('click', function () {
 $('#btnCargar').on('click', function () {
     page++;
     const token = localStorage.getItem('token');
-    getPhotos(token);
+    getPhotnpmos(token);
 })
+
+
+
+
+
+
+
+
+
+

@@ -16,7 +16,7 @@ async function getData(){
 
     //filtar Paises segun condicion
     const filtro = casosPais.filter(pais => pais.deaths >= 10000)
-    
+    //objetos 
     console.log(filtro)
 }
 

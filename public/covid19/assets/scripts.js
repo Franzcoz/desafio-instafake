@@ -6,6 +6,7 @@ formu.on('submit', function (ev) {
     const email = $('#email').val();
     const password = $('#password').val();
     getToken(email, password);
+    Entrar();
 })
 
 let getToken = async (email, password) => {
@@ -27,8 +28,17 @@ const init = () => {
         return;
     }
     // getData(token);
+    Entrar();
 }
 init();
+
+// Ocultar formulario y mostrar página
+
+const Entrar = () => {
+    $('#formulario-login').removeClass('d-block').addClass('d-none');
+    $('#Grafico').removeClass('d-none').addClass('d-block');
+    $('#Tabla').removeClass('d-none').addClass('d-block');
+}
 
 // Traer los datos de la api Javier
 

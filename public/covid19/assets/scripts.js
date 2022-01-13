@@ -1,24 +1,34 @@
 // Formulario de ingreso Franco
-let formu = $('#formulario-login')
 
-formu.on('submit', function (ev) {
-    ev.preventDefault();
+console.log('hola');
+$('#form-login').on('submit', function (ev) {             
+    ev.preventDefault(); 
     const email = $('#email').val();
     const password = $('#password').val();
     getToken(email, password);
     Entrar();
 })
 
+
+
 let getToken = async (email, password) => {
-    await fetch('/api/login', {
+    const data = await fetch('/api/login', {
         method: 'POST',
         body: JSON.stringify({ email, password })
     })
+    
     const jwt = await data.json()
     // guardamos el token en una variable
     const token = jwt.token;
     localStorage.setItem('token', token);
     // getData(token);
+}
+// Ocultar formulario y mostrar página
+
+const Entrar = () => {
+    $('#formulario-login').removeClass('d-block').addClass('d-none');
+    $('#Grafico').removeClass('d-none').addClass('d-block');
+    $('#Tabla').removeClass('d-none').addClass('d-block');
 }
 
 //Chequear si existe token
@@ -32,13 +42,7 @@ const init = () => {
 }
 init();
 
-// Ocultar formulario y mostrar página
 
-const Entrar = () => {
-    $('#formulario-login').removeClass('d-block').addClass('d-none');
-    $('#Grafico').removeClass('d-none').addClass('d-block');
-    $('#Tabla').removeClass('d-none').addClass('d-block');
-}
 
 // Traer los datos de la api Javier
 //***************************///***************************/
@@ -92,14 +96,9 @@ window.onload = function () {
             lineColor: "#C0504E",
             labelFontColor: "#C0504E",
             tickColor: "#C0504E"
-            tickColor: "#C0504E"
         },	
         toolTip: {
             shared: true
-        },
-        legend: {
-            cursor:"pointer",
-            itemclick: toggleDataSeries
         },
         data: [{
             type: "column",
@@ -148,30 +147,13 @@ window.onload = function () {
         }]
     });
     chart.render();
+}
 
 
-    function toggleDataSeries(e) {
-        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-            e.dataSeries.visible = false;
-        }
-        else {
-            e.dataSeries.visible = true;
-        }
-        chart.render();
-    }
-    
-    }
-
-    
-    
-//const myChart = new Chart(
-    document.getElementById('myChart'),
-    config
-  );//
 
 
   //Tabla //
-  const labels = [
+const labels = [
     '',
   '',
   '',

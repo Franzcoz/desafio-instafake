@@ -39,6 +39,7 @@ const init = () => {
     }
     // getData(token);
     Entrar();
+    getData()
 }
 init();
 
@@ -58,15 +59,14 @@ async function getData(){
     const casosPais = request.data
 
     //filtar Paises segun condicion
-    const filtro = casosPais.filter(pais => pais.deaths >= 10000)
+    const filtro = casosPais.filter(pais => pais.deaths >= 100000)
     //objetos 
     console.log(filtro)
+    // llamamos a la funcion grafico
+    grafico(filtro)
+
+    llenarTabla(casosPais)
 }
-
-
-
-
-
 
 
 
@@ -76,7 +76,19 @@ async function getData(){
 // Gráfico Carla
 //Grafico//
 
-window.onload = function () {
+function grafico (paises) {
+
+    const activos = []
+    const confirmados = []
+    const fallecidos = []
+    const recuperados = []
+
+    for (pais of paises){
+        activos.push({label: pais.location, y: pais.active})
+        confirmados.push({label: pais.location, y: pais.confirmed})
+        fallecidos.push({label: pais.location, y: pais.deaths})
+        recuperados.push({label: pais.location, y: pais.recovered})
+    }
 
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
@@ -84,7 +96,7 @@ window.onload = function () {
             text: "Casos Covid 19 pais por pais"
         },	
         axisY: {
-            title: "Casos activos",
+            title: "Casos",
             titleFontColor: "#4F81BC",
             lineColor: "#4F81BC",
             labelFontColor: "#4F81BC",
@@ -96,6 +108,20 @@ window.onload = function () {
             lineColor: "#C0504E",
             labelFontColor: "#C0504E",
             tickColor: "#C0504E"
+        },
+        axisY3: {
+            title: "Casos fallecidos",
+            titleFontColor: "#C0504E",
+            lineColor: "#C0504E",
+            labelFontColor: "#C0504E",
+            tickColor: "#C0504E"
+        },
+        axisY4: {
+            title: "Casos recuperados",
+            titleFontColor: "#C0504E",
+            lineColor: "#C0504E",
+            labelFontColor: "#C0504E",
+            tickColor: "#C0504E"
         },	
         toolTip: {
             shared: true
@@ -103,77 +129,57 @@ window.onload = function () {
         data: [{
             type: "column",
             name: "Casos activos",
-            legendText: "Proven Oil Reserves",
+            legendText: "Casos activos",
             showInLegend: true, 
-            dataPoints:[
-                { label: "Saudi", y: 266.21 },
-                { label: "Venezuela", y: 302.25 },
-                { label: "Iran", y: 157.20 },
-                { label: "Iraq", y: 148.77 },
-                { label: "Kuwait", y: 101.50 },
-                { label: "UAE", y: 97.8 }
-            ]
+            dataPoints: activos
         },
         {
             type: "column",	
-            name: "Casos recuperados",
-            legendText: "Oil Production",
+            name: "Casos confirmados",
+            legendText: "Casos confirmados",
             axisYType: "secondary",
             showInLegend: true,
-            dataPoints:[
-                { label: "Saudi", y: 10.46 },
-                { label: "Venezuela", y: 2.27 },
-                { label: "Iran", y: 3.99 },
-                { label: "Iraq", y: 4.45 },
-                { label: "Kuwait", y: 2.92 },
-                { label: "UAE", y: 3.1 }
-            ]
+            dataPoints: confirmados
         },
         {
            
             type: "column",	
             name: "Fallecidos",
-            legendText: "Oil Production",
+            legendText: "Fallecidos",
             axisYType: "secondary",
             showInLegend: true,
-            dataPoints:[
-                { label: "Saudi", y: 10.46 },
-                { label: "Venezuela", y: 2.27 },
-                { label: "Iran", y: 3.99 },
-                { label: "Iraq", y: 4.45 },
-                { label: "Kuwait", y: 2.92 },
-                { label: "UAE", y: 3.1 }
-            ]
+            dataPoints: fallecidos
+        },
+        {
+           
+            type: "column",	
+            name: "Casos recuperados",
+            legendText: "Casos recuperados",
+            axisYType: "secondary",
+            showInLegend: true,
+            dataPoints: recuperados
         }]
     });
     chart.render();
 }
 
+ //llenar tabla 
+
+ function llenarTabla (datos){
+    $('#cuerpoTabla').append()
+    const activos = []
+    const confirmados = []
+    const fallecidos = []
+    const recuperados = []
+
+    for (dato of datos){
+        $('#cuerpoTabla').append(`
+        <tr>
+            <td>${dato.location}</td>
+            <td><button class="btn btn-primary">Ver detalle</button></td>
+        </tr>
+        `)
+    }
 
 
-
-  //Tabla //
-const labels = [
-    '',
-  '',
-  '',
-  '',
-  '',
-  '',
-];
-
-const data = {
-  labels: labels,
-  datasets: [{
-    label: 'My First dataset',
-    backgroundColor: 'rgb(255, 99, 132)',
-    borderColor: 'rgb(255, 99, 132)',
-    data: [0, 10, 5, 2, 20, 30, 45],
-  }]
-};
-
-const config = {
-  type: 'line',
-  data: data,
-  options: {}
-};
+ }

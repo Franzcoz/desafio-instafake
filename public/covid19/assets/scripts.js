@@ -165,23 +165,44 @@ function grafico (paises) {
 
  //llenar tabla 
 
+ function graficoDetalle(pais){
+    var chart = new CanvasJS.Chart("chartModal", {
+        theme: "light1", // "light2", "dark1", "dark2"
+        animationEnabled: false, // change to true		
+        title:{
+            text: pais
+        },
+        data: [
+        {
+            // Change type to "bar", "area", "spline", "pie",etc.
+            type: "column",
+            dataPoints: [
+                { label: "apple",  y: 10  },
+                { label: "orange", y: 15  },
+                { label: "banana", y: 25  },
+                { label: "mango",  y: 30  },
+                { label: "grape",  y: 28  }
+            ]
+        }
+        ]
+    });
+    chart.render();
+ }
+
  function llenarTabla (datos){
     $('#cuerpoTabla').append()
-    const activos = []
-    const confirmados = []
-    const fallecidos = []
-    const recuperados = []
-
     for (dato of datos){
         $('#cuerpoTabla').append(`
         <tr>
             <td>${dato.location}</td>
             <td>${dato.confirmed}</td>
             <td>${dato.deaths}</td>
-            <td><button class="btn btn-primary">Ver detalle</button></td>
+            <td><button data-name="${dato.location}" class="btn btn-primary verDetalle" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver detalle</button></td>
         </tr>
         `)
     }
-
-
  }
+ $(document).on('click', '.verDetalle', function() {
+    const name = $(this).attr('data-name')
+    graficoDetalle(name)
+})

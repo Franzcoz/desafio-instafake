@@ -176,6 +176,8 @@ function grafico (paises) {
         $('#cuerpoTabla').append(`
         <tr>
             <td>${dato.location}</td>
+            <td>${dato.confirmed}</td>
+            <td>${dato.deaths}</td>
             <td><button class="btn btn-primary">Ver detalle</button></td>
         </tr>
         `)

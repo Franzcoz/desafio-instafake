@@ -9,8 +9,6 @@ $('#form-login').on('submit', function (ev) {
     Entrar();
 })
 
-
-
 let getToken = async (email, password) => {
     const data = await fetch('/api/login', {
         method: 'POST',
@@ -26,6 +24,7 @@ let getToken = async (email, password) => {
 // Ocultar formulario y mostrar página
 
 const Entrar = () => {
+    $('#btnSalir').removeClass('d-none').addClass('d-block');
     $('#formulario-login').removeClass('d-block').addClass('d-none');
     $('#Grafico').removeClass('d-none').addClass('d-block');
     $('#Tabla').removeClass('d-none').addClass('d-block');
@@ -43,7 +42,18 @@ const init = () => {
 }
 init();
 
+//Salir (borrar token e invertir display de ingreso)
+const salir = () => {
+    localStorage.removeItem('token');
+    $('#btnSalir').removeClass('d-block').addClass('d-none');
+    $('#formulario-login').removeClass('d-none').addClass('d-block');
+    $('#Grafico').removeClass('d-block').addClass('d-none');
+    $('#Tabla').removeClass('d-block').addClass('d-none');
+}
 
+$('#btnSalir').on('click', function () {
+    salir();
+})
 
 // Traer los datos de la api Javier
 //***************************///***************************/
@@ -67,9 +77,6 @@ async function getData(){
 
     llenarTabla(casosPais)
 }
-
-
-
 
 //***************************///***************************/
 
@@ -142,7 +149,6 @@ function grafico (paises) {
             dataPoints: confirmados
         },
         {
-           
             type: "column",	
             name: "Fallecidos",
             legendText: "Fallecidos",
@@ -151,7 +157,6 @@ function grafico (paises) {
             dataPoints: fallecidos
         },
         {
-           
             type: "column",	
             name: "Casos recuperados",
             legendText: "Casos recuperados",
@@ -165,8 +170,8 @@ function grafico (paises) {
 
  //llenar tabla 
 
- function graficoDetalle(pais){
-    var chart = new CanvasJS.Chart("chartModal", {
+function graficoDetalle(pais){
+    const chart = new CanvasJS.Chart("chartModal", {
         theme: "light1", // "light2", "dark1", "dark2"
         animationEnabled: false, // change to true		
         title:{
@@ -187,9 +192,9 @@ function grafico (paises) {
         ]
     });
     chart.render();
- }
+}
 
- function llenarTabla (datos){
+function llenarTabla (datos){
     $('#cuerpoTabla').append()
     for (dato of datos){
         $('#cuerpoTabla').append(`
@@ -201,8 +206,8 @@ function grafico (paises) {
         </tr>
         `)
     }
- }
- $(document).on('click', '.verDetalle', function() {
-    const name = $(this).attr('data-name')
-    graficoDetalle(name)
+}
+$(document).on('click', '.verDetalle', function() {
+    let name = $(this).attr('data-name');
+    graficoDetalle(name);
 })
